@@ -2,62 +2,71 @@
 <html>
 
 <head>
-<title>
-Live Map - Campus Waste Management
-</title>
+<title>Live Map - Campus Waste Management</title>
 
 <link rel="stylesheet" href="https://js.arcgis.com/4.6/esri/css/main.css">
 <script src="https://js.arcgis.com/4.6/"></script>
 
-<! -- used online tools to help with the webpage design and to get color refrence, so it looked presentable -->
+<!-- used online tools to help with the webpage design and to get color reference -->
 
 <style>
 body {
-font-family: Arial;
-background-color: white;
-color: black;
-margin: 0;
+  font-family: Arial;
+  background-color: white;
+  color: black;
+  margin: 0;
 }
 
 .header {
-background-color: maroon;
-color: white;
-padding: 20px;
-text-align: center;
+  background-color: maroon;
+  color: white;
+  padding: 20px;
+  text-align: center;
 }
 
 .nav {
-background-color: #f2f2f2;
-border-bottom: 1px solid black;
-text-align: center;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid black;
+  text-align: center;
+  padding: 10px 0;
 }
 
 .nav a {
-display: inline-block;
-padding: 10px 20px;
-color: black;
-text-decoration: none;
-font-weight: bold;
+  display: inline-block;
+  margin: 0 10px;
+  padding: 8px 16px;
+  background-color: #e0e0e0;
+  color: black;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.nav a:hover {
+  background-color: #cccccc;
 }
 
 .section {
-padding: 20px;
+  padding: 20px;
 }
 
-<! -- arc map design in webpage -->
+/* ArcGIS map container */
 #viewDiv {
-height: 500px;
-width: 100%;
-border: 1px solid #ccc;
-margin-top: 20px;
+  height: 500px;
+  width: 100%;
+  border: 1px solid #ccc;
+  margin-top: 20px;
 }
 
-<! -- leaflet heat map design in webpage -->
+/* Leaflet heatmap container */
 #leafletMap {
-height: 500px;
-width: 100%;
-border: 1px solid #ccc;
-margin-top: 40px;
+  margin-top: 40px;
+}
+
+#leafletMap iframe {
+  width: 100%;
+  height: 500px;
+  border: 1px solid #ccc;
 }
 </style>
 
@@ -65,89 +74,77 @@ margin-top: 40px;
 
 <body>
 
-<! -- header -->
+<!-- header -->
 <div class="header">
-
 <h1>Campus Waste Management & Tracking</h1>
 <h3 style="margin-top: 10px; font-weight: normal;">
 Charles Tacker, Destiny Silva, Claire Lifrieri, Rishit Podder, Monika Venkat – GEOG 478
 </h3>
 <p>Tracking Trash Trends at Texas A&M</p>
-
 </div>
 
-<! -- tabs -->
+<!-- tabs -->
 <div class="nav">
 <a href="index.html">Introduction</a>
 <a href="solution.html">Solution</a>
 <a href="map.html">Maps</a>
 </div>
 
-<! -- map header -->
+<!-- map header -->
 <div class="section">
-
 <h2>Live Point Map and Heat Map</h2>
 <p>Here is the live point map showing trash reports in real-time (ArcGIS Online):</p>
 
-<! -- integrating arc map -->
 <!-- ArcGIS Map -->
 <div id="viewDiv"></div>
 
-<! -- integrating heatmap -->
-<p> </p>
 <p>This is a heat map showing trash reports in real-time (Leaflet):</p>
 
-<!-- leaflet map -->
+<!-- Leaflet Map -->
 <div id="leafletMap">
-<iframe src="https://rishitpodder.github.io/478-Final-Project/finalheatmap.html" 
-width="100%" 
-height="100%" 
-style="border: none;">
-</iframe>
+<iframe src="https://rishitpodder.github.io/478-Final-Project/finalheatmap.html"></iframe>
+</div>
 </div>
 
-</div>
-
-<! -- integrating arc map -->
+<!-- ArcGIS Script -->
 <script>
 require([
-"esri/Map",
-"esri/views/MapView",
-"esri/layers/FeatureLayer",
-"dojo/domReady!"
+  "esri/Map",
+  "esri/views/MapView",
+  "esri/layers/FeatureLayer",
+  "dojo/domReady!"
 ], function(Map, MapView, FeatureLayer) {
 
-var map = new Map({
-basemap: "streets"
-});
+  var map = new Map({
+    basemap: "streets"
+  });
 
-var view = new MapView({
-container: "viewDiv",
-map: map,
-center: [-96.339469, 30.617152], // College Station
-zoom: 16
-});
+  var view = new MapView({
+    container: "viewDiv",
+    map: map,
+    center: [-96.339469, 30.617152], // College Station
+    zoom: 16
+  });
 
-var featureLayer = new FeatureLayer({
-url: "https://services1.arcgis.com/qr14biwnHA6Vis6l/arcgis/rest/services/Campus_Waste_Management_Survey__(view)/FeatureServer"
-});
+  var featureLayer = new FeatureLayer({
+    url: "https://services1.arcgis.com/qr14biwnHA6Vis6l/arcgis/rest/services/Campus_Waste_Management_Survey__(view)/FeatureServer"
+  });
 
-featureLayer.popupTemplate = {
-title: "Issue at {spot_on_campus}",
-content: [{
-type: "fields",
-fieldInfos: [
-{ fieldName: "hazardmaintenance_need", label: "Issue" },
-{ fieldName: "observation_date_and_time", label: "Time" },
-{ fieldName: "level_of_severity", label: "Severity" }
-]
-}]
-};
+  featureLayer.popupTemplate = {
+    title: "Issue at {spot_on_campus}",
+    content: [{
+      type: "fields",
+      fieldInfos: [
+        { fieldName: "hazardmaintenance_need", label: "Issue" },
+        { fieldName: "observation_date_and_time", label: "Time" },
+        { fieldName: "level_of_severity", label: "Severity" }
+      ]
+    }]
+  };
 
-map.add(featureLayer);
+  map.add(featureLayer);
 });
 </script>
 
 </body>
-
 </html>
