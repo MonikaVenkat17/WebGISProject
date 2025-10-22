@@ -3,7 +3,7 @@
 This interactive web map visualizes areas of trash accumulation across Texas A&M’s campus.  
 Built using **HTML**, **CSS**, and **ArcGIS Web GIS principles**, the site presents survey data and proposed solutions.
 
-🌐 **Live Site:** [View Here](https://monikavenkat17.github.io/trash-accumulation-tamu/)
+🌐 **Live Site:** [View Here](https://monikavenkat17.github.io/WebGISProject/) 
 
 ## Project Overview
 - Developed as part of the WebGIS course at Texas A&M University.
